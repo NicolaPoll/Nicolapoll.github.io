@@ -15,8 +15,6 @@
       --timeline-line: #e0e6ec;
       --hover-bg: #e9f3fb;
       --shadow: 0 4px 18px rgba(0,0,0,0.08);
-      --project-gap: 20px;
-      --project-minwidth: 210px;
       --btn-bg: #1462a6;
       --btn-txt: #fff;
       --btn-hover: #2d7abe;
@@ -80,8 +78,6 @@
       font-size: 1.17em;
       margin-top: 7px;
     }
-
-    /* Dark/Light Mode Button */
     .darkmode-toggle {
       position: absolute;
       top: 32px;
@@ -104,8 +100,6 @@
     .darkmode-toggle button:hover {
       background: var(--btn-hover);
     }
-
-    /* About me */
     .about-toggle {
       display: flex;
       align-items: center;
@@ -139,7 +133,7 @@
       to {opacity:1;}
     }
 
-    /* Timeline */
+    /* Timeline (neu: Detail nicht mehr absolut, sondern verschiebt Inhalte nach unten) */
     .timeline-section {
       margin: 46px 0 36px 0;
     }
@@ -156,6 +150,8 @@
       transition: background 0.18s;
       z-index: 2;
       outline: none;
+      display: flex;
+      flex-direction: column;
     }
     .timeline-point {
       position: absolute;
@@ -207,32 +203,29 @@
       font-weight: 400;
     }
     .timeline-detail {
-      position: absolute;
-      left: 44px;
-      top: 35px;
       background: var(--box-bg);
-      box-shadow: 0 3px 16px rgba(20,98,166,0.12);
+      box-shadow: 0 3px 16px rgba(20,98,166,0.09);
       border-radius: 11px;
       color: var(--main-text);
       font-size: 1em;
       opacity: 0;
-      min-width: 220px;
-      max-width: 350px;
-      padding: 11px 18px;
-      pointer-events: none;
-      z-index: 5;
-      transition: opacity 0.32s, transform 0.32s;
-      transform: translateY(10px) scale(0.98);
-      font-weight: 500;
+      max-height: 0;
+      margin-top: 0;
+      padding: 0 18px;
       border: 1.5px solid var(--hover-bg);
+      transition: opacity 0.32s, max-height 0.32s, margin-top 0.25s, padding 0.25s;
+      font-weight: 500;
+      pointer-events: none;
     }
     .timeline-event:hover .timeline-detail,
-    .timeline-event.focus .timeline-detail {
+    .timeline-event.focus .timeline-detail,
+    .timeline-event.active .timeline-detail {
       opacity: 1;
+      max-height: 60px;
+      margin-top: 8px;
+      padding: 11px 18px;
       pointer-events: auto;
-      transform: translateY(0) scale(1);
     }
-
     /* Skills */
     .skills-section {
       margin-bottom: 40px;
@@ -256,22 +249,25 @@
       box-shadow: 0 0 0 rgba(0,0,0,0);
       cursor: pointer;
       outline: none;
+      text-decoration: none;
+      display: inline-block;
     }
     .skills-list li:hover, .skills-list li:focus {
       background: var(--main-accent);
       color: #fff;
       transform: translateY(-3px) scale(1.08);
       box-shadow: 0 6px 18px -6px var(--main-accent, #1462a6, .13);
+      text-decoration: underline;
     }
 
-    /* Projects */
+    /* Projects (wie gehabt) */
     .projects-section {
       margin-bottom: 42px;
     }
     .projects-list {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--project-gap);
+      gap: 20px;
       list-style: none;
       padding: 0;
       margin: 0;
@@ -283,7 +279,7 @@
       background: var(--hover-bg);
       border-radius: 14px;
       padding: 18px 22px;
-      min-width: var(--project-minwidth);
+      min-width: 210px;
       min-height: 90px;
       box-shadow: 0 1px 4px rgba(20,98,166,0.07);
       transition: transform 0.22s, box-shadow 0.22s, background 0.18s, color 0.15s;
@@ -303,18 +299,6 @@
     }
     .project-card strong {
       margin-bottom: 6px;
-    }
-    .project-card::after {
-      content: "🔗";
-      position: absolute;
-      right: 18px;
-      bottom: 14px;
-      opacity: 0.16;
-      font-size: 1.6em;
-      pointer-events: none;
-    }
-    .project-card:hover::after, .project-card:focus::after {
-      opacity: 0.38;
     }
 
     /* Contact as Buttons */
@@ -346,7 +330,6 @@
       outline: none;
     }
 
-    /* Scroll-Animation */
     .scroll-animate {
       opacity: 0;
       transform: translateY(40px);
@@ -356,7 +339,6 @@
       opacity: 1;
       transform: none;
     }
-
     /* Mobile Optimierung */
     @media (max-width: 950px) {
       .container { padding: 16px 6vw; }
@@ -371,7 +353,7 @@
       .headline h1 { font-size: 2.0em; }
     }
     @media (max-width: 500px) {
-      .timeline-detail { min-width: 130px; max-width: 97vw; left: 6vw; }
+      .timeline-detail { min-width: 130px; max-width: 97vw; left: 0; }
       .container { margin: 3vw; }
       .about-toggle { font-size: 1em; }
     }
@@ -379,8 +361,8 @@
 </head>
 <body>
   <div class="darkmode-toggle">
-    <button id="darkBtn" style="display:none;">🌙 Dark Mode</button>
-    <button id="lightBtn" style="display:none;">☀️ Light Mode</button>
+    <button id="darkBtn" style="display:none;">Dark Mode</button>
+    <button id="lightBtn" style="display:none;">Light Mode</button>
   </div>
   <div class="container">
     <div class="top-row">
@@ -392,174 +374,6 @@
     </div>
 
     <div>
-      <div class="about-toggle" tabindex="0">
+      <div class="about-toggle" tabindex="0" id="aboutToggle">
         About me
         <span class="arrow">▼</span>
-      </div>
-      <div class="about-box" id="aboutBox">
-        <p>
-          I'm Nicola Pollara, an IT Project Manager and Release Manager based in Switzerland. I have a strong track record in leading digital transformation, implementing enterprise IT systems, and driving cross-functional teams. With deep hands-on experience in SAP S/4HANA, IT infrastructure, and process optimization, I bridge the gap between technology and business. I thrive on turning complex challenges into efficient solutions – always with a focus on collaboration and user impact.
-        </p>
-      </div>
-    </div>
-
-    <div class="timeline-section scroll-animate">
-      <h2>Professional Timeline</h2>
-      <div class="timeline">
-        <div class="timeline-event" tabindex="0">
-          <span class="timeline-point"></span>
-          <div class="timeline-content">
-            <span class="timeline-date">2025–now</span>
-            <span class="timeline-role">ITOT – Quality Systems Engineer</span>
-            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
-          </div>
-          <div class="timeline-detail">
-            Focus: Quality IT systems and process optimization in pharma production.
-          </div>
-        </div>
-        <div class="timeline-event" tabindex="0">
-          <span class="timeline-point"></span>
-          <div class="timeline-content">
-            <span class="timeline-date">2024–now</span>
-            <span class="timeline-role">ITOT – System Release Manager</span>
-            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
-          </div>
-          <div class="timeline-detail">
-            Responsible for planning and executing system releases and IT changes.
-          </div>
-        </div>
-        <div class="timeline-event" tabindex="0">
-          <span class="timeline-point"></span>
-          <div class="timeline-content">
-            <span class="timeline-date">2023–now</span>
-            <span class="timeline-role">SPOC / Process Lead Hardware, ASPIRE SAP S/4HANA</span>
-            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
-          </div>
-          <div class="timeline-detail">
-            Leading hardware topics for global SAP implementation.
-          </div>
-        </div>
-        <div class="timeline-event" tabindex="0">
-          <span class="timeline-point"></span>
-          <div class="timeline-content">
-            <span class="timeline-date">2023–2025</span>
-            <span class="timeline-role">ITOT – Quality / System Support Specialist</span>
-            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
-          </div>
-          <div class="timeline-detail">
-            Supporting quality and IT operations in pharmaceutical manufacturing.
-          </div>
-        </div>
-        <div class="timeline-event" tabindex="0">
-          <span class="timeline-point"></span>
-          <div class="timeline-content">
-            <span class="timeline-date">2020–2023</span>
-            <span class="timeline-role">CSV Expert</span>
-            <span class="timeline-company">@ F. Hoffmann-La Roche (via contractor)</span>
-          </div>
-          <div class="timeline-detail">
-            Computerized System Validation and regulatory compliance.
-          </div>
-        </div>
-        <div class="timeline-event" tabindex="0">
-          <span class="timeline-point"></span>
-          <div class="timeline-content">
-            <span class="timeline-date">2018–2019</span>
-            <span class="timeline-role">Junior Desktop Support Analyst</span>
-            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
-          </div>
-          <div class="timeline-detail">
-            IT support for scientific and manufacturing environments.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="skills-section scroll-animate">
-      <h2>Skills & Tools</h2>
-      <ul class="skills-list">
-        <li>Project Management</li>
-        <li>SAP S/4HANA</li>
-        <li>System Release Management</li>
-        <li>Agile / Scrum</li>
-        <li>IT Infrastructure</li>
-        <li>Process Optimization</li>
-        <li>Stakeholder Management</li>
-        <li>Python / Automation</li>
-        <li>Digital Transformation</li>
-      </ul>
-    </div>
-
-    <div class="projects-section scroll-animate">
-      <h2>Selected Projects</h2>
-      <ul class="projects-list">
-        <a href="https://www.roche.com" target="_blank" class="project-card">
-          <strong>ASPIRE @ Roche</strong>
-          Hardware & IT-Lead for global SAP S/4HANA rollout
-        </a>
-        <a href="https://arcane.li" target="_blank" class="project-card">
-          <strong>Arcane GmbH</strong>
-          IT setup & digitalization in sports business
-        </a>
-        <a href="https://github.com/NicolaPoll" target="_blank" class="project-card">
-          <strong>Portfolio Website</strong>
-          GitHub Profile
-        </a>
-      </ul>
-    </div>
-
-    <div class="contact-section scroll-animate">
-      <a href="mailto:nicola.matthias.pollara@gmail.com" class="contact-btn">E-Mail</a>
-      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank" class="contact-btn">LinkedIn</a>
-      <a href="https://github.com/NicolaPoll" target="_blank" class="contact-btn">GitHub</a>
-    </div>
-  </div>
-  <script>
-    // Dark/Light Mode Toggle
-    const darkBtn = document.getElementById('darkBtn');
-    const lightBtn = document.getElementById('lightBtn');
-    function updateModeBtn() {
-      if(document.body.classList.contains('dark')) {
-        darkBtn.style.display = 'none';
-        lightBtn.style.display = '';
-      } else {
-        darkBtn.style.display = '';
-        lightBtn.style.display = 'none';
-      }
-    }
-    darkBtn.onclick = () => { document.body.classList.add('dark'); updateModeBtn(); }
-    lightBtn.onclick = () => { document.body.classList.remove('dark'); updateModeBtn(); }
-    document.addEventListener('DOMContentLoaded', () => {
-      updateModeBtn();
-    });
-
-    // About me toggle
-    const aboutToggle = document.querySelector('.about-toggle');
-    const aboutBox = document.querySelector('.about-box');
-    const arrow = document.querySelector('.about-toggle .arrow');
-    aboutToggle.onclick = () => {
-      aboutBox.classList.toggle('open');
-      arrow.style.transform = aboutBox.classList.contains('open') ? "rotate(180deg)" : "none";
-    };
-    aboutToggle.onkeydown = e => {
-      if (e.key === "Enter" || e.key === " ") aboutToggle.click();
-    };
-
-    // Scroll-Animation
-    function scrollAnim() {
-      document.querySelectorAll('.scroll-animate').forEach(el => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 80) el.classList.add('visible');
-      });
-    }
-    window.addEventListener('scroll', scrollAnim);
-    window.addEventListener('DOMContentLoaded', scrollAnim);
-
-    // Timeline accessible focus for details
-    document.querySelectorAll('.timeline-event').forEach(item => {
-      item.onfocus = item.onmouseover = () => item.classList.add('focus');
-      item.onblur = item.onmouseout = () => item.classList.remove('focus');
-    });
-  </script>
-</body>
-</html>
