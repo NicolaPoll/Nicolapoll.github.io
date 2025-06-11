@@ -5,6 +5,7 @@
   <title>Nicola Pollara – Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="Profilbild.PNG">
   <style>
     :root {
       --main-bg: #f7f9fa;
@@ -13,6 +14,12 @@
       --box-bg: #fff;
       --timeline-line: #e0e6ec;
       --hover-bg: #e9f3fb;
+      --shadow: 0 4px 18px rgba(0,0,0,0.08);
+      --project-gap: 20px;
+      --project-minwidth: 210px;
+      --btn-bg: #1462a6;
+      --btn-txt: #fff;
+      --btn-hover: #2d7abe;
     }
     body.dark {
       --main-bg: #222b30;
@@ -21,6 +28,10 @@
       --box-bg: #23272a;
       --timeline-line: #3c4858;
       --hover-bg: #2d3946;
+      --shadow: 0 6px 24px rgba(0,0,0,0.22);
+      --btn-bg: #6ec1e4;
+      --btn-txt: #181f23;
+      --btn-hover: #95e1ff;
     }
     body {
       background: var(--main-bg);
@@ -29,20 +40,21 @@
       margin: 0;
       padding: 0;
       transition: background 0.3s, color 0.3s;
+      min-height: 100vh;
     }
     .container {
       max-width: 900px;
-      margin: 50px auto;
+      margin: 40px auto 30px auto;
       background: var(--box-bg);
       border-radius: 18px;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+      box-shadow: var(--shadow);
       padding: 42px 42px 32px 42px;
     }
     .top-row {
       display: flex;
       align-items: center;
       gap: 38px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .profile-pic {
       width: 120px;
@@ -50,8 +62,9 @@
       object-fit: cover;
       border-radius: 50%;
       border: 3px solid var(--main-accent);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      box-shadow: 0 8px 32px rgba(20,98,166,0.09);
       background: #fff;
+      transition: border-color 0.3s;
     }
     .headline {
       flex: 1;
@@ -64,33 +77,48 @@
     .subtitle {
       color: var(--main-accent);
       font-weight: 700;
-      font-size: 1.2em;
-      margin-top: 6px;
+      font-size: 1.17em;
+      margin-top: 7px;
     }
+
+    /* Dark/Light Mode Button */
     .darkmode-toggle {
       position: absolute;
-      top: 26px;
+      top: 32px;
       right: 60px;
-      background: none;
-      border: none;
-      font-size: 1.6em;
-      cursor: pointer;
-      color: var(--main-accent);
-      transition: color 0.2s;
+      z-index: 99;
+      font-size: 1.15em;
     }
+    .darkmode-toggle button {
+      padding: 9px 25px;
+      border-radius: 20px;
+      border: none;
+      font-weight: bold;
+      background: var(--btn-bg);
+      color: var(--btn-txt);
+      font-size: 1.1em;
+      box-shadow: 0 2px 8px rgba(20,98,166,0.08);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .darkmode-toggle button:hover {
+      background: var(--btn-hover);
+    }
+
+    /* About me */
     .about-toggle {
       display: flex;
       align-items: center;
       cursor: pointer;
       font-weight: 600;
-      margin-bottom: 14px;
+      margin-bottom: 13px;
       color: var(--main-accent);
-      font-size: 1.18em;
+      font-size: 1.15em;
       user-select: none;
     }
     .about-toggle .arrow {
-      margin-left: 7px;
-      font-size: 1.13em;
+      margin-left: 8px;
+      font-size: 1.16em;
       transition: transform 0.3s;
     }
     .about-box {
@@ -98,44 +126,53 @@
       overflow: hidden;
       opacity: 0;
       transition: all 0.4s cubic-bezier(.7,0,.3,1);
-      margin-bottom: 14px;
+      margin-bottom: 13px;
     }
     .about-box.open {
       max-height: 400px;
       opacity: 1;
-      margin-bottom: 22px;
+      margin-bottom: 21px;
+      animation: fadeIn .7s;
     }
+    @keyframes fadeIn {
+      from {opacity:0;}
+      to {opacity:1;}
+    }
+
     /* Timeline */
     .timeline-section {
-      margin: 44px 0 34px 0;
+      margin: 46px 0 36px 0;
     }
     .timeline {
       position: relative;
-      margin-left: 18px;
-      padding-left: 30px;
+      margin-left: 17px;
+      padding-left: 34px;
       border-left: 3px solid var(--timeline-line);
     }
     .timeline-event {
       position: relative;
-      margin-bottom: 32px;
+      margin-bottom: 35px;
       min-height: 44px;
-      transition: background 0.2s;
+      transition: background 0.18s;
+      z-index: 2;
+      outline: none;
     }
     .timeline-point {
       position: absolute;
-      left: -44px;
-      top: 8px;
+      left: -45px;
+      top: 10px;
       width: 20px;
       height: 20px;
       background: var(--main-accent);
       border-radius: 50%;
-      border: 3px solid var(--box-bg);
-      z-index: 2;
+      border: 4px solid var(--box-bg);
+      z-index: 3;
       transition: box-shadow 0.2s;
+      box-shadow: 0 0 0 0 transparent;
     }
     .timeline-event:hover .timeline-point,
-    .timeline-event:focus .timeline-point {
-      box-shadow: 0 0 0 4px var(--main-accent, #1462a6, .18);
+    .timeline-event.focus .timeline-point {
+      box-shadow: 0 0 0 8px var(--main-accent, #1462a6, .14);
     }
     .timeline-content {
       padding: 7px 18px 7px 12px;
@@ -145,11 +182,13 @@
       font-weight: 600;
       display: flex;
       align-items: baseline;
-      gap: 10px;
-      transition: background 0.15s;
+      gap: 11px;
+      transition: background 0.14s;
+      position: relative;
+      z-index: 2;
     }
     .timeline-event:hover .timeline-content,
-    .timeline-event:focus .timeline-content {
+    .timeline-event.focus .timeline-content {
       background: var(--hover-bg);
     }
     .timeline-role {
@@ -162,31 +201,41 @@
       margin-left: 8px;
     }
     .timeline-date {
-      font-size: 0.96em;
+      font-size: 0.97em;
       margin-right: 8px;
       color: #888;
       font-weight: 400;
     }
     .timeline-detail {
-      max-width: 550px;
-      margin-left: 34px;
-      margin-top: 3px;
+      position: absolute;
+      left: 44px;
+      top: 35px;
+      background: var(--box-bg);
+      box-shadow: 0 3px 16px rgba(20,98,166,0.12);
+      border-radius: 11px;
       color: var(--main-text);
       font-size: 1em;
       opacity: 0;
-      max-height: 0;
-      transition: all 0.35s cubic-bezier(.7,0,.3,1);
+      min-width: 220px;
+      max-width: 350px;
+      padding: 11px 18px;
       pointer-events: none;
+      z-index: 5;
+      transition: opacity 0.32s, transform 0.32s;
+      transform: translateY(10px) scale(0.98);
+      font-weight: 500;
+      border: 1.5px solid var(--hover-bg);
     }
     .timeline-event:hover .timeline-detail,
-    .timeline-event:focus .timeline-detail {
+    .timeline-event.focus .timeline-detail {
       opacity: 1;
-      max-height: 40px;
       pointer-events: auto;
+      transform: translateY(0) scale(1);
     }
+
     /* Skills */
     .skills-section {
-      margin-bottom: 38px;
+      margin-bottom: 40px;
     }
     .skills-list {
       display: flex;
@@ -203,63 +252,136 @@
       border-radius: 15px;
       font-size: 1em;
       font-weight: 500;
-      transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+      transition: box-shadow 0.19s, transform 0.19s, background 0.19s;
       box-shadow: 0 0 0 rgba(0,0,0,0);
       cursor: pointer;
+      outline: none;
     }
     .skills-list li:hover, .skills-list li:focus {
       background: var(--main-accent);
       color: #fff;
       transform: translateY(-3px) scale(1.08);
-      box-shadow: 0 6px 18px -6px var(--main-accent, #1462a6, .12);
+      box-shadow: 0 6px 18px -6px var(--main-accent, #1462a6, .13);
     }
+
     /* Projects */
     .projects-section {
-      margin-bottom: 40px;
+      margin-bottom: 42px;
     }
     .projects-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: var(--project-gap);
       list-style: none;
       padding: 0;
       margin: 0;
     }
-    .projects-list li {
-      background: var(--hover-bg);
-      border-radius: 14px;
-      padding: 18px 22px;
-      min-width: 210px;
-      min-height: 90px;
-      box-shadow: 0 1px 4px rgba(20,98,166,0.06);
-      transition: transform 0.23s, box-shadow 0.23s;
-      font-weight: 500;
-      cursor: pointer;
-      flex: 1 0 240px;
+    .project-card {
       display: flex;
       flex-direction: column;
       justify-content: center;
+      background: var(--hover-bg);
+      border-radius: 14px;
+      padding: 18px 22px;
+      min-width: var(--project-minwidth);
+      min-height: 90px;
+      box-shadow: 0 1px 4px rgba(20,98,166,0.07);
+      transition: transform 0.22s, box-shadow 0.22s, background 0.18s, color 0.15s;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--main-text);
+      cursor: pointer;
+      flex: 1 0 230px;
+      position: relative;
+      outline: none;
     }
-    .projects-list li:hover, .projects-list li:focus {
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 10px 24px -7px var(--main-accent, #1462a6, .12);
+    .project-card:hover, .project-card:focus {
+      transform: translateY(-5px) scale(1.045);
+      box-shadow: 0 10px 24px -8px var(--main-accent, #1462a6, .14);
       background: var(--main-accent);
       color: #fff;
     }
-    /* Animation beim Scrollen */
+    .project-card strong {
+      margin-bottom: 6px;
+    }
+    .project-card::after {
+      content: "🔗";
+      position: absolute;
+      right: 18px;
+      bottom: 14px;
+      opacity: 0.16;
+      font-size: 1.6em;
+      pointer-events: none;
+    }
+    .project-card:hover::after, .project-card:focus::after {
+      opacity: 0.38;
+    }
+
+    /* Contact as Buttons */
+    .contact-section {
+      margin: 40px 0 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 17px;
+      align-items: center;
+    }
+    .contact-btn {
+      display: inline-block;
+      padding: 10px 26px;
+      background: var(--btn-bg);
+      color: var(--btn-txt);
+      border: none;
+      border-radius: 25px;
+      font-size: 1.13em;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 2px 9px rgba(20,98,166,0.07);
+      transition: background 0.16s, color 0.16s, transform 0.13s;
+      cursor: pointer;
+    }
+    .contact-btn:hover, .contact-btn:focus {
+      background: var(--btn-hover);
+      color: #23272a;
+      transform: translateY(-2px) scale(1.05);
+      outline: none;
+    }
+
+    /* Scroll-Animation */
     .scroll-animate {
       opacity: 0;
       transform: translateY(40px);
-      transition: all 0.8s cubic-bezier(.4,0,.2,1);
+      transition: all 0.85s cubic-bezier(.4,0,.2,1);
     }
     .scroll-animate.visible {
       opacity: 1;
       transform: none;
     }
+
+    /* Mobile Optimierung */
+    @media (max-width: 950px) {
+      .container { padding: 16px 6vw; }
+    }
+    @media (max-width: 740px) {
+      .top-row { flex-direction: column; align-items: flex-start; gap: 22px; }
+      .profile-pic { width: 90px; height: 90px; }
+      .container { padding: 9vw 2vw; }
+      .projects-list { flex-direction: column; gap: 17px; }
+      .project-card { min-width: 0; width: 100%; }
+      .contact-section { gap: 10px; flex-direction: column; }
+      .headline h1 { font-size: 2.0em; }
+    }
+    @media (max-width: 500px) {
+      .timeline-detail { min-width: 130px; max-width: 97vw; left: 6vw; }
+      .container { margin: 3vw; }
+      .about-toggle { font-size: 1em; }
+    }
   </style>
 </head>
 <body>
-  <button class="darkmode-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+  <div class="darkmode-toggle">
+    <button id="darkBtn" style="display:none;">🌙 Dark Mode</button>
+    <button id="lightBtn" style="display:none;">☀️ Light Mode</button>
+  </div>
   <div class="container">
     <div class="top-row">
       <div class="headline">
@@ -371,32 +493,45 @@
     <div class="projects-section scroll-animate">
       <h2>Selected Projects</h2>
       <ul class="projects-list">
-        <li>
-          <strong>ASPIRE @ Roche</strong><br>
+        <a href="https://www.roche.com" target="_blank" class="project-card">
+          <strong>ASPIRE @ Roche</strong>
           Hardware & IT-Lead for global SAP S/4HANA rollout
-        </li>
-        <li>
-          <strong>Arcane GmbH</strong><br>
+        </a>
+        <a href="https://arcane.li" target="_blank" class="project-card">
+          <strong>Arcane GmbH</strong>
           IT setup & digitalization in sports business
-        </li>
-        <li>
-          <strong>Portfolio Website</strong><br>
-          <a href="https://github.com/NicolaPoll" target="_blank" style="color:inherit;text-decoration:underline;">GitHub Profile</a>
-        </li>
+        </a>
+        <a href="https://github.com/NicolaPoll" target="_blank" class="project-card">
+          <strong>Portfolio Website</strong>
+          GitHub Profile
+        </a>
       </ul>
     </div>
 
     <div class="contact-section scroll-animate">
-      <h2>Contact</h2>
-      <a href="mailto:info@arcane.li">E-Mail</a> &nbsp;|&nbsp;
-      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank">LinkedIn</a> &nbsp;|&nbsp;
-      <a href="https://github.com/NicolaPoll" target="_blank">GitHub</a>
+      <a href="mailto:nicola.matthias.pollara@gmail.com" class="contact-btn">E-Mail</a>
+      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank" class="contact-btn">LinkedIn</a>
+      <a href="https://github.com/NicolaPoll" target="_blank" class="contact-btn">GitHub</a>
     </div>
   </div>
   <script>
-    // Dark mode toggle
-    const toggleBtn = document.querySelector('.darkmode-toggle');
-    toggleBtn.onclick = () => document.body.classList.toggle('dark');
+    // Dark/Light Mode Toggle
+    const darkBtn = document.getElementById('darkBtn');
+    const lightBtn = document.getElementById('lightBtn');
+    function updateModeBtn() {
+      if(document.body.classList.contains('dark')) {
+        darkBtn.style.display = 'none';
+        lightBtn.style.display = '';
+      } else {
+        darkBtn.style.display = '';
+        lightBtn.style.display = 'none';
+      }
+    }
+    darkBtn.onclick = () => { document.body.classList.add('dark'); updateModeBtn(); }
+    lightBtn.onclick = () => { document.body.classList.remove('dark'); updateModeBtn(); }
+    document.addEventListener('DOMContentLoaded', () => {
+      updateModeBtn();
+    });
 
     // About me toggle
     const aboutToggle = document.querySelector('.about-toggle');
