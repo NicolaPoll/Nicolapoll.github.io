@@ -1,161 +1,430 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Nicola Pollara – Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --main-bg: #f7f9fa;
+      --main-text: #222;
+      --main-accent: #1462a6;
+      --box-bg: #fff;
+      --timeline-line: #e0e6ec;
+      --hover-bg: #e9f3fb;
+    }
+    body.dark {
+      --main-bg: #222b30;
+      --main-text: #f7f7f7;
+      --main-accent: #6ec1e4;
+      --box-bg: #23272a;
+      --timeline-line: #3c4858;
+      --hover-bg: #2d3946;
+    }
     body {
+      background: var(--main-bg);
+      color: var(--main-text);
       font-family: 'Inter', Arial, sans-serif;
-      background: #f7f9fa;
-      color: #222;
       margin: 0;
       padding: 0;
+      transition: background 0.3s, color 0.3s;
     }
     .container {
-      max-width: 750px;
-      margin: 60px auto;
-      background: #fff;
+      max-width: 900px;
+      margin: 50px auto;
+      background: var(--box-bg);
       border-radius: 18px;
       box-shadow: 0 4px 18px rgba(0,0,0,0.07);
-      padding: 36px 30px;
+      padding: 42px 42px 32px 42px;
     }
-    h1 {
-      margin-top: 0;
-      font-size: 2.3em;
+    .top-row {
+      display: flex;
+      align-items: center;
+      gap: 38px;
+      margin-bottom: 20px;
     }
-    .profilbild {
-      width: 110px;
-      height: 110px;
+    .profile-pic {
+      width: 120px;
+      height: 120px;
       object-fit: cover;
       border-radius: 50%;
-      border: 3px solid #1462a6;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-      display: block;
+      border: 3px solid var(--main-accent);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      background: #fff;
+    }
+    .headline {
+      flex: 1;
+    }
+    .headline h1 {
+      margin: 0;
+      font-size: 2.6em;
+      letter-spacing: -1px;
     }
     .subtitle {
-      color: #0066cc;
+      color: var(--main-accent);
       font-weight: 700;
       font-size: 1.2em;
-      margin-bottom: 24px;
+      margin-top: 6px;
     }
-    .about {
-      margin-bottom: 28px;
-      line-height: 1.6;
-    }
-    .skills {
-      margin-bottom: 28px;
-    }
-    .skills ul {
-      list-style: none;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .skills li {
-      background: #e9f3fb;
-      color: #1462a6;
-      padding: 7px 15px;
-      border-radius: 15px;
-      font-size: 1em;
-    }
-    .projects {
-      margin-bottom: 34px;
-    }
-    .projects ul {
-      padding: 0;
-      list-style: none;
-    }
-    .projects li {
-      margin-bottom: 12px;
-      padding: 10px 0 10px 16px;
-      border-left: 4px solid #1462a6;
-      background: #f2f6fa;
-      border-radius: 6px;
-    }
-    .contact {
-      margin-top: 34px;
-    }
-    .contact a {
-      color: #0066cc;
-      text-decoration: none;
-      font-weight: 700;
-      margin-right: 15px;
+    .darkmode-toggle {
+      position: absolute;
+      top: 26px;
+      right: 60px;
+      background: none;
+      border: none;
+      font-size: 1.6em;
+      cursor: pointer;
+      color: var(--main-accent);
       transition: color 0.2s;
     }
-    .contact a:hover {
-      color: #1462a6;
+    .about-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      margin-bottom: 14px;
+      color: var(--main-accent);
+      font-size: 1.18em;
+      user-select: none;
     }
-    @media (max-width: 600px) {
-      .container {
-        padding: 20px 10px;
-        margin: 18px 8px;
-      }
-      .skills ul {
-        flex-direction: column;
-        gap: 8px;
-      }
-      .profilbild {
-        width: 85px;
-        height: 85px;
-      }
+    .about-toggle .arrow {
+      margin-left: 7px;
+      font-size: 1.13em;
+      transition: transform 0.3s;
+    }
+    .about-box {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(.7,0,.3,1);
+      margin-bottom: 14px;
+    }
+    .about-box.open {
+      max-height: 400px;
+      opacity: 1;
+      margin-bottom: 22px;
+    }
+    /* Timeline */
+    .timeline-section {
+      margin: 44px 0 34px 0;
+    }
+    .timeline {
+      position: relative;
+      margin-left: 18px;
+      padding-left: 30px;
+      border-left: 3px solid var(--timeline-line);
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 32px;
+      min-height: 44px;
+      transition: background 0.2s;
+    }
+    .timeline-point {
+      position: absolute;
+      left: -44px;
+      top: 8px;
+      width: 20px;
+      height: 20px;
+      background: var(--main-accent);
+      border-radius: 50%;
+      border: 3px solid var(--box-bg);
+      z-index: 2;
+      transition: box-shadow 0.2s;
+    }
+    .timeline-event:hover .timeline-point,
+    .timeline-event:focus .timeline-point {
+      box-shadow: 0 0 0 4px var(--main-accent, #1462a6, .18);
+    }
+    .timeline-content {
+      padding: 7px 18px 7px 12px;
+      background: transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      transition: background 0.15s;
+    }
+    .timeline-event:hover .timeline-content,
+    .timeline-event:focus .timeline-content {
+      background: var(--hover-bg);
+    }
+    .timeline-role {
+      font-size: 1.14em;
+      color: var(--main-accent);
+    }
+    .timeline-company {
+      color: #aaa;
+      font-size: 1em;
+      margin-left: 8px;
+    }
+    .timeline-date {
+      font-size: 0.96em;
+      margin-right: 8px;
+      color: #888;
+      font-weight: 400;
+    }
+    .timeline-detail {
+      max-width: 550px;
+      margin-left: 34px;
+      margin-top: 3px;
+      color: var(--main-text);
+      font-size: 1em;
+      opacity: 0;
+      max-height: 0;
+      transition: all 0.35s cubic-bezier(.7,0,.3,1);
+      pointer-events: none;
+    }
+    .timeline-event:hover .timeline-detail,
+    .timeline-event:focus .timeline-detail {
+      opacity: 1;
+      max-height: 40px;
+      pointer-events: auto;
+    }
+    /* Skills */
+    .skills-section {
+      margin-bottom: 38px;
+    }
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .skills-list li {
+      background: var(--hover-bg);
+      color: var(--main-accent);
+      padding: 8px 19px;
+      border-radius: 15px;
+      font-size: 1em;
+      font-weight: 500;
+      transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+      box-shadow: 0 0 0 rgba(0,0,0,0);
+      cursor: pointer;
+    }
+    .skills-list li:hover, .skills-list li:focus {
+      background: var(--main-accent);
+      color: #fff;
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 6px 18px -6px var(--main-accent, #1462a6, .12);
+    }
+    /* Projects */
+    .projects-section {
+      margin-bottom: 40px;
+    }
+    .projects-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .projects-list li {
+      background: var(--hover-bg);
+      border-radius: 14px;
+      padding: 18px 22px;
+      min-width: 210px;
+      min-height: 90px;
+      box-shadow: 0 1px 4px rgba(20,98,166,0.06);
+      transition: transform 0.23s, box-shadow 0.23s;
+      font-weight: 500;
+      cursor: pointer;
+      flex: 1 0 240px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .projects-list li:hover, .projects-list li:focus {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 10px 24px -7px var(--main-accent, #1462a6, .12);
+      background: var(--main-accent);
+      color: #fff;
+    }
+    /* Animation beim Scrollen */
+    .scroll-animate {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(.4,0,.2,1);
+    }
+    .scroll-animate.visible {
+      opacity: 1;
+      transform: none;
     }
   </style>
 </head>
 <body>
-    <div class="container">
-    <div class="container">
-      <div style="display: flex; align-items: center; gap: 32px; margin-bottom: 10px;">
-        <div style="flex: 1;">
-          <h1 style="margin-bottom: 0;">Nicola Pollara</h1>
-          <div class="subtitle">IT Project Manager | System Release Manager | Tech Enthusiast</div>
-        </div>
-        <img src="Profilbild.PNG" alt="Profilbild von Nicola" class="profilbild">
+  <button class="darkmode-toggle" title="Toggle dark mode" aria-label="Toggle dark mode">🌙</button>
+  <div class="container">
+    <div class="top-row">
+      <div class="headline">
+        <h1>Nicola Pollara</h1>
+        <div class="subtitle">IT Project Manager | System Release Manager | Tech Enthusiast</div>
       </div>
-
-
-        <div class="about">
-      <p>
-        Hi, ich bin Nicola – IT-Projektmanager und Release Manager aus der Schweiz. Ich liebe es, technische Herausforderungen anzupacken, digitale Lösungen zu entwickeln und Teams gemeinsam voranzubringen.<br>
-        Aktuell bin ich bei Roche und Arcane GmbH aktiv und kombiniere Technik mit Leadership und Kommunikation.<br>
-        <br>
-        Hier findest du einen Überblick zu meinen Skills, Projekten & Kontaktmöglichkeiten.
-      </p>
+      <img src="Profilbild.PNG" alt="Profile picture of Nicola" class="profile-pic">
     </div>
 
-    <div class="skills">
-      <strong>Skills & Tools:</strong>
-      <ul>
-        <li>Projektmanagement</li>
+    <div>
+      <div class="about-toggle" tabindex="0">
+        About me
+        <span class="arrow">▼</span>
+      </div>
+      <div class="about-box" id="aboutBox">
+        <p>
+          I'm Nicola Pollara, an IT Project Manager and Release Manager based in Switzerland. I have a strong track record in leading digital transformation, implementing enterprise IT systems, and driving cross-functional teams. With deep hands-on experience in SAP S/4HANA, IT infrastructure, and process optimization, I bridge the gap between technology and business. I thrive on turning complex challenges into efficient solutions – always with a focus on collaboration and user impact.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-section scroll-animate">
+      <h2>Professional Timeline</h2>
+      <div class="timeline">
+        <div class="timeline-event" tabindex="0">
+          <span class="timeline-point"></span>
+          <div class="timeline-content">
+            <span class="timeline-date">2025–now</span>
+            <span class="timeline-role">ITOT – Quality Systems Engineer</span>
+            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
+          </div>
+          <div class="timeline-detail">
+            Focus: Quality IT systems and process optimization in pharma production.
+          </div>
+        </div>
+        <div class="timeline-event" tabindex="0">
+          <span class="timeline-point"></span>
+          <div class="timeline-content">
+            <span class="timeline-date">2024–now</span>
+            <span class="timeline-role">ITOT – System Release Manager</span>
+            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
+          </div>
+          <div class="timeline-detail">
+            Responsible for planning and executing system releases and IT changes.
+          </div>
+        </div>
+        <div class="timeline-event" tabindex="0">
+          <span class="timeline-point"></span>
+          <div class="timeline-content">
+            <span class="timeline-date">2023–now</span>
+            <span class="timeline-role">SPOC / Process Lead Hardware, ASPIRE SAP S/4HANA</span>
+            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
+          </div>
+          <div class="timeline-detail">
+            Leading hardware topics for global SAP implementation.
+          </div>
+        </div>
+        <div class="timeline-event" tabindex="0">
+          <span class="timeline-point"></span>
+          <div class="timeline-content">
+            <span class="timeline-date">2023–2025</span>
+            <span class="timeline-role">ITOT – Quality / System Support Specialist</span>
+            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
+          </div>
+          <div class="timeline-detail">
+            Supporting quality and IT operations in pharmaceutical manufacturing.
+          </div>
+        </div>
+        <div class="timeline-event" tabindex="0">
+          <span class="timeline-point"></span>
+          <div class="timeline-content">
+            <span class="timeline-date">2020–2023</span>
+            <span class="timeline-role">CSV Expert</span>
+            <span class="timeline-company">@ F. Hoffmann-La Roche (via contractor)</span>
+          </div>
+          <div class="timeline-detail">
+            Computerized System Validation and regulatory compliance.
+          </div>
+        </div>
+        <div class="timeline-event" tabindex="0">
+          <span class="timeline-point"></span>
+          <div class="timeline-content">
+            <span class="timeline-date">2018–2019</span>
+            <span class="timeline-role">Junior Desktop Support Analyst</span>
+            <span class="timeline-company">@ F. Hoffmann-La Roche</span>
+          </div>
+          <div class="timeline-detail">
+            IT support for scientific and manufacturing environments.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="skills-section scroll-animate">
+      <h2>Skills & Tools</h2>
+      <ul class="skills-list">
+        <li>Project Management</li>
         <li>SAP S/4HANA</li>
         <li>System Release Management</li>
         <li>Agile / Scrum</li>
-        <li>IT-Infrastruktur</li>
+        <li>IT Infrastructure</li>
         <li>Process Optimization</li>
         <li>Stakeholder Management</li>
-        <li>Python / Automatisierung</li>
+        <li>Python / Automation</li>
         <li>Digital Transformation</li>
       </ul>
     </div>
 
-    <div class="projects">
-      <strong>Projekte (Auswahl):</strong>
-      <ul>
-        <li><b>ASPIRE @ Roche:</b> Hardware & IT-Lead für internationale SAP-Implementierung</li>
-        <li><b>Arcane GmbH:</b> IT-Setup & Digitalisierung im Sportbusiness</li>
-        <li><b>Portfolio-Website:</b> <a href="https://github.com/NicolaPoll" target="_blank">GitHub Profil ansehen</a></li>
+    <div class="projects-section scroll-animate">
+      <h2>Selected Projects</h2>
+      <ul class="projects-list">
+        <li>
+          <strong>ASPIRE @ Roche</strong><br>
+          Hardware & IT-Lead for global SAP S/4HANA rollout
+        </li>
+        <li>
+          <strong>Arcane GmbH</strong><br>
+          IT setup & digitalization in sports business
+        </li>
+        <li>
+          <strong>Portfolio Website</strong><br>
+          <a href="https://github.com/NicolaPoll" target="_blank" style="color:inherit;text-decoration:underline;">GitHub Profile</a>
+        </li>
       </ul>
     </div>
 
-    <div class="contact">
-      <strong>Kontakt:</strong><br>
-      <a href="mailto:nicola.pollara@gmail.com">E-Mail</a>
-      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank">LinkedIn</a>
+    <div class="contact-section scroll-animate">
+      <h2>Contact</h2>
+      <a href="mailto:info@arcane.li">E-Mail</a> &nbsp;|&nbsp;
+      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank">LinkedIn</a> &nbsp;|&nbsp;
       <a href="https://github.com/NicolaPoll" target="_blank">GitHub</a>
     </div>
   </div>
+  <script>
+    // Dark mode toggle
+    const toggleBtn = document.querySelector('.darkmode-toggle');
+    toggleBtn.onclick = () => document.body.classList.toggle('dark');
+
+    // About me toggle
+    const aboutToggle = document.querySelector('.about-toggle');
+    const aboutBox = document.querySelector('.about-box');
+    const arrow = document.querySelector('.about-toggle .arrow');
+    aboutToggle.onclick = () => {
+      aboutBox.classList.toggle('open');
+      arrow.style.transform = aboutBox.classList.contains('open') ? "rotate(180deg)" : "none";
+    };
+    aboutToggle.onkeydown = e => {
+      if (e.key === "Enter" || e.key === " ") aboutToggle.click();
+    };
+
+    // Scroll-Animation
+    function scrollAnim() {
+      document.querySelectorAll('.scroll-animate').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 80) el.classList.add('visible');
+      });
+    }
+    window.addEventListener('scroll', scrollAnim);
+    window.addEventListener('DOMContentLoaded', scrollAnim);
+
+    // Timeline accessible focus for details
+    document.querySelectorAll('.timeline-event').forEach(item => {
+      item.onfocus = item.onmouseover = () => item.classList.add('focus');
+      item.onblur = item.onmouseout = () => item.classList.remove('focus');
+    });
+  </script>
 </body>
 </html>
