@@ -5,199 +5,348 @@
   <title>Nicola Pollara – Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="Profilbild.PNG" type="image/png">
+  <link rel="icon" type="image/png" href="Profilbild.PNG">
   <style>
+    /* ========== Variablen & Grundsetup ========== */
     :root {
       --bg: #f7f9fa;
       --text: #222;
       --accent: #1462a6;
       --box: #fff;
+      --line: #e0e6ec;
       --hover: #e9f3fb;
-      --shadow: rgba(0,0,0,0.08) 0 4px 18px;
-      --btn-bg: #1462a6;
-      --btn-txt: #fff;
+      --shadow: rgba(0,0,0,0.08);
     }
     body.dark {
       --bg: #222b30;
       --text: #f7f7f7;
       --accent: #6ec1e4;
       --box: #23272a;
+      --line: #3c4858;
       --hover: #2d3946;
-      --shadow: rgba(0,0,0,0.22) 0 6px 24px;
-      --btn-bg: #6ec1e4;
-      --btn-txt: #181f23;
+      --shadow: rgba(0,0,0,0.22);
     }
-    * { box-sizing: border-box; }
     body {
-      margin:0; padding:0;
-      font-family:'Inter',sans-serif;
-      background:var(--bg); color:var(--text);
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
       transition: .3s;
     }
     .container {
-      max-width:900px; margin:40px auto;
-      background:var(--box); border-radius:18px;
-      box-shadow:var(--shadow); padding:42px;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 42px;
+      background: var(--box);
+      border-radius: 18px;
+      box-shadow: 0 4px 18px var(--shadow);
     }
-    .dark-toggle {
-      position:absolute; top:20px; right:20px;
+
+    /* ========== Dark/Light Toggle ========== */
+    .darkmode {
+      position: fixed; top: 20px; right: 20px;
     }
-    .dark-toggle button {
-      background:var(--btn-bg); color:var(--btn-txt);
-      border:none; padding:8px 16px; border-radius:20px;
-      cursor:pointer; font-weight:bold;
+    .darkmode button {
+      background: var(--accent);
+      color: var(--box);
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
     }
+    .darkmode button:hover {
+      opacity: 0.85;
+    }
+
+    /* ========== Header ========== */
     .top {
-      display:flex; align-items:center; justify-content:space-between;
-      flex-wrap:wrap;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
     }
-    .top h1 { margin:0; font-size:2.4em; }
-    .subtitle { color:var(--accent); font-weight:700; }
-    .profile { width:100px;height:100px;border-radius:50%;
-      border:3px solid var(--accent); object-fit:cover;
+    .top .text {
+      flex: 1;
     }
-    .about { margin:24px 0; }
-    .about h2 { cursor:pointer; color:var(--accent); }
-    .about p { max-height:0; opacity:0; overflow:hidden;
-      transition:.4s; }
-    .about.open p { max-height:400px; opacity:1; }
-
-    .section { margin:36px 0; }
-    .section h2 { margin-bottom:16px; }
-
-    /* Timeline */
-    .timeline { border-left:3px solid var(--hover); padding-left:24px; }
-    .event { position:relative; margin-bottom:24px; cursor:pointer; }
-    .event:hover .detail,
-    .event.active .detail { max-height:80px; opacity:1; margin-top:8px; padding:8px; }
-    .event .dot {
-      position:absolute; left:-36px; top:2px;
-      width:16px;height:16px;border-radius:50%;
-      background:var(--accent); border:3px solid var(--box);
+    .top h1 {
+      margin: 0; font-size: 2.4em;
     }
-    .event .meta { display:flex; gap:8px; flex-wrap:wrap; }
-    .event .date { color:#888; width:60px; }
-    .detail {
-      background:var(--box); max-height:0; opacity:0;
-      overflow:hidden; transition:.3s; border-radius:8px;
-      box-shadow:var(--shadow);
+    .top .subtitle {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+    .profile-pic {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      object-fit: cover;
     }
 
-    /* Skills */
-    .skills-list { display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0;}
+    /* ========== About Me ========== */
+    .about-toggle {
+      margin: 28px 0 10px;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent);
+    }
+    .about-content {
+      display: none;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .about-content.open {
+      display: block;
+    }
+
+    /* ========== Timeline ========== */
+    .timeline-section {
+      margin: 40px 0 30px;
+    }
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+      border-left: 3px solid var(--line);
+    }
+    .timeline-event {
+      position: relative;
+      margin-bottom: 24px;
+      padding-bottom: 8px;
+    }
+    .timeline-event:last-child {
+      margin-bottom: 0;
+    }
+    .timeline-point {
+      position: absolute;
+      left: -9px; /*  -9 to center on the line */
+      top: 0;
+      width: 18px; height: 18px;
+      background: var(--accent);
+      border: 3px solid var(--box);
+      border-radius: 50%;
+    }
+    .timeline-content {
+      margin-left: 12px;
+    }
+    .timeline-date {
+      color: #888;
+      font-size: 0.95em;
+    }
+    .timeline-role {
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 1.07em;
+      margin: 4px 0 2px;
+    }
+    .timeline-company {
+      color: #999;
+      font-size: 0.95em;
+    }
+    .timeline-detail {
+      margin-top: 4px;
+      padding: 8px 12px;
+      background: var(--box);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px var(--shadow);
+      font-size: 0.95em;
+      display: none;
+    }
+    .timeline-event.open .timeline-detail {
+      display: block;
+    }
+
+    /* ========== Skills ========== */
+    .skills-section {
+      margin: 40px 0 30px;
+    }
+    .skills-list {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      list-style: none; padding: 0;
+    }
     .skills-list li {
-      background:var(--hover); color:var(--accent);
-      padding:6px 12px; border-radius:12px; font-size:.95em;
-      transition:.2s;
+      background: var(--hover);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 14px;
+      font-size: 0.95em;
+      cursor: pointer;
+      transition: .2s;
     }
-    .skills-list li:hover { background:var(--accent); color:#fff; }
-
-    /* Projects */
-    .projects { display:flex; flex-wrap:wrap; gap:16px; list-style:none; padding:0;}
-    .projects a {
-      flex:1 1 220px; background:var(--hover);
-      padding:16px; border-radius:12px; text-decoration:none;
-      color:var(--text); box-shadow:var(--shadow);
-      transition:.2s;
+    .skills-list li:hover {
+      background: var(--accent);
+      color: var(--box);
     }
-    .projects a:hover { background:var(--accent); color:#fff; }
 
-    /* Contacts */
-    .contact { display:flex; flex-wrap:wrap; gap:12px; margin-top:32px; }
-    .contact a {
-      background:var(--btn-bg); color:var(--btn-txt);
-      padding:8px 16px; border-radius:20px;
-      text-decoration:none; font-weight:600;
-      transition:.2s;
+    /* ========== Projects ========== */
+    .projects-section {
+      margin: 40px 0 30px;
     }
-    .contact a:hover { background:var(--btn-txt); color:var(--btn-bg); }
+    .projects-list {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      list-style: none; padding: 0;
+    }
+    .project-card {
+      flex: 1 0 200px;
+      background: var(--hover);
+      padding: 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      transition: .2s;
+    }
+    .project-card:hover {
+      background: var(--accent);
+      color: var(--box);
+      transform: translateY(-4px);
+    }
 
-    /* Mobile */
-    @media(max-width:600px){
-      .projects a { flex:1 1 100%; }
+    /* ========== Contact ========== */
+    .contact-section {
+      margin: 40px 0 10px;
+      display: flex; flex-wrap: wrap; gap: 12px;
+    }
+    .contact-btn {
+      background: var(--accent);
+      color: var(--box);
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: .2s;
+    }
+    .contact-btn:hover {
+      opacity: 0.85;
+    }
+
+    /* ========== Mobile Adjustments ========== */
+    @media (max-width: 720px) {
+      .top-row { flex-direction: column; align-items: flex-start; }
+      .profile-pic { width: 90px; height: 90px; }
+      .timeline-content { display: block; }
+      .timeline-content span { display: block; }
+      .skills-list { gap: 8px; }
+      .project-card { width: 90vw; margin: 0 auto; }
+      .contact-section { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-  <div class="dark-toggle">
-    <button id="toDark">Dark Mode</button>
-    <button id="toLight" style="display:none;">Light Mode</button>
+
+  <!-- Dark / Light Mode Toggle -->
+  <div class="darkmode">
+    <button id="darkBtn">Dark Mode</button>
+    <button id="lightBtn" style="display:none;">Light Mode</button>
   </div>
 
   <div class="container">
-    <div class="top">
-      <div>
+    <!-- Header -->
+    <div class="top top-row">
+      <div class="text">
         <h1>Nicola Pollara</h1>
         <div class="subtitle">IT Project Manager | System Release Manager | Tech Enthusiast</div>
       </div>
-      <img src="Profilbild.PNG" alt="" class="profile">
+      <img src="Profilbild.PNG" alt="Nicola Pollara" class="profile-pic">
     </div>
 
-    <div class="about">
-      <h2 id="aboutToggle">About me ▼</h2>
+    <!-- About Me -->
+    <div class="about-toggle" id="aboutToggle">About me ▼</div>
+    <div class="about-content" id="aboutContent">
       <p>I'm Nicola Pollara, an IT Project Manager and Release Manager based in Switzerland. I have a strong track record in leading digital transformation, implementing enterprise IT systems, and driving cross-functional teams. With deep hands-on experience in SAP S/4HANA, IT infrastructure, and process optimization, I bridge the gap between technology and business. I thrive on turning complex challenges into efficient solutions – always with a focus on collaboration and user impact.</p>
     </div>
 
-    <div class="section">
+    <!-- Timeline -->
+    <section class="timeline-section">
       <h2>Professional Timeline</h2>
       <div class="timeline">
-        <div class="event" tabindex="0">
-          <span class="dot"></span>
-          <div class="meta"><span class="date">2025–now</span><strong>Quality Systems Engineer</strong><span>@ Roche</span></div>
-          <div class="detail">Focus: Quality IT systems and process optimization in pharma production.</div>
+        <!-- Beispiel-Event -->
+        <div class="timeline-event" tabindex="0">
+          <div class="timeline-point"></div>
+          <div class="timeline-content">
+            <span class="timeline-date">2025–now</span>
+            <span class="timeline-role">ITOT – Quality Systems Engineer</span>
+            <span class="timeline-company">@ Roche</span>
+          </div>
+          <div class="timeline-detail">Focus: Quality IT systems and process optimization in pharma production.</div>
         </div>
-        <div class="event" tabindex="0">
-          <span class="dot"></span>
-          <div class="meta"><span class="date">2024–now</span><strong>System Release Manager</strong><span>@ Roche</span></div>
-          <div class="detail">Responsible for planning and executing system releases and IT changes.</div>
-        </div>
-        <!-- weitere Events... -->
+        <!-- Weitere Events analog... -->
       </div>
-    </div>
+    </section>
 
-    <div class="section">
+    <!-- Skills -->
+    <section class="skills-section">
       <h2>Skills & Tools</h2>
       <ul class="skills-list">
         <li><a href="https://en.wikipedia.org/wiki/Project_management" target="_blank">Project Management</a></li>
         <li><a href="https://en.wikipedia.org/wiki/SAP_S/4HANA" target="_blank">SAP S/4HANA</a></li>
-        <li><a href="https://en.wikipedia.org/wiki/Release_management" target="_blank">Release Management</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Release_management" target="_blank">System Release Management</a></li>
         <li><a href="https://en.wikipedia.org/wiki/Scrum_(software_development)" target="_blank">Agile / Scrum</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/IT_infrastructure" target="_blank">IT Infrastructure</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Process_management" target="_blank">Process Optimization</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Stakeholder_management" target="_blank">Stakeholder Management</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Python_(programming_language)" target="_blank">Python / Automation</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Digital_transformation" target="_blank">Digital Transformation</a></li>
       </ul>
-    </div>
+    </section>
 
-    <div class="section">
+    <!-- Projects -->
+    <section class="projects-section">
       <h2>Selected Projects</h2>
-      <ul class="projects">
-        <a href="https://www.roche.com" target="_blank"><strong>ASPIRE @ Roche</strong><br>Hardware & IT-Lead for global SAP S/4HANA rollout</a>
-        <a href="https://arcane.li" target="_blank"><strong>Arcane GmbH</strong><br>IT setup & digitalization in sports business</a>
-        <a href="https://github.com/NicolaPoll" target="_blank"><strong>Portfolio Website</strong><br>GitHub Profile</a>
-      </ul>
-    </div>
+      <div class="projects-list">
+        <a href="https://www.roche.com" target="_blank" class="project-card">
+          <strong>ASPIRE @ Roche</strong><br>
+          Hardware & IT-Lead for global SAP S/4HANA rollout
+        </a>
+        <a href="https://arcane.li" target="_blank" class="project-card">
+          <strong>Arcane GmbH</strong><br>
+          IT setup & digitalization in sports business
+        </a>
+        <a href="https://github.com/NicolaPoll" target="_blank" class="project-card">
+          <strong>Portfolio Website</strong><br>
+          GitHub Profile
+        </a>
+      </div>
+    </section>
 
-    <div class="contact">
-      <a href="mailto:nicola.matthias.pollara@gmail.com">E-Mail</a>
-      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank">LinkedIn</a>
-      <a href="https://github.com/NicolaPoll" target="_blank">GitHub</a>
+    <!-- Contact -->
+    <div class="contact-section">
+      <a href="mailto:nicola.matthias.pollara@gmail.com" class="contact-btn">E-Mail</a>
+      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank" class="contact-btn">LinkedIn</a>
+      <a href="https://github.com/NicolaPoll" target="_blank" class="contact-btn">GitHub</a>
     </div>
   </div>
 
   <script>
-    // Dark/Light toggle
-    const toDark = document.getElementById('toDark');
-    const toLight = document.getElementById('toLight');
-    toDark.onclick = () => { document.body.classList.add('dark'); toDark.style.display='none'; toLight.style.display='inline'; };
-    toLight.onclick = () => { document.body.classList.remove('dark'); toLight.style.display='none'; toDark.style.display='inline'; };
+    // Dark/Light Mode
+    const darkBtn = document.getElementById('darkBtn');
+    const lightBtn = document.getElementById('lightBtn');
+    function updateMode() {
+      if (document.body.classList.contains('dark')) {
+        document.body.classList.remove('dark');
+        lightBtn.style.display = 'none';
+        darkBtn.style.display = '';
+      } else {
+        document.body.classList.add('dark');
+        darkBtn.style.display = 'none';
+        lightBtn.style.display = '';
+      }
+    }
+    darkBtn.onclick = updateMode;
+    lightBtn.onclick = updateMode;
 
-    // About toggle
+    // About Me Toggle
     const aboutToggle = document.getElementById('aboutToggle');
-    const aboutBox = aboutToggle.nextElementSibling;
-    aboutToggle.onclick = () => aboutBox.classList.toggle('open');
+    const aboutContent = document.getElementById('aboutContent');
+    aboutToggle.onclick = () => {
+      const open = aboutContent.classList.toggle('open');
+      aboutToggle.textContent = open ? 'About me ▲' : 'About me ▼';
+    };
 
-    // Timeline expand
-    document.querySelectorAll('.event').forEach(ev => {
-      ev.onclick = () => ev.classList.toggle('active');
-      ev.onfocus = () => ev.classList.add('active');
-      ev.onblur = () => ev.classList.remove('active');
+    // Timeline Toggle Details
+    document.querySelectorAll('.timeline-event').forEach(evt => {
+      evt.onclick = () => evt.classList.toggle('open');
+      evt.onkeypress = e => { if (e.key==='Enter') evt.classList.toggle('open'); };
     });
   </script>
 </body>
