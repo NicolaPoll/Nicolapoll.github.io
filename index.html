@@ -5,421 +5,199 @@
   <title>Nicola Pollara – Portfolio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/png" href="Profilbild.PNG">
+  <link rel="icon" href="Profilbild.PNG" type="image/png">
   <style>
     :root {
-      --main-bg: #f7f9fa;
-      --main-text: #222;
-      --main-accent: #1462a6;
-      --box-bg: #fff;
-      --timeline-line: #e0e6ec;
-      --hover-bg: #e9f3fb;
-      --shadow: 0 4px 18px rgba(0,0,0,0.08);
+      --bg: #f7f9fa;
+      --text: #222;
+      --accent: #1462a6;
+      --box: #fff;
+      --hover: #e9f3fb;
+      --shadow: rgba(0,0,0,0.08) 0 4px 18px;
       --btn-bg: #1462a6;
       --btn-txt: #fff;
-      --btn-hover: #2d7abe;
     }
     body.dark {
-      --main-bg: #222b30;
-      --main-text: #f7f7f7;
-      --main-accent: #6ec1e4;
-      --box-bg: #23272a;
-      --timeline-line: #3c4858;
-      --hover-bg: #2d3946;
-      --shadow: 0 6px 24px rgba(0,0,0,0.22);
+      --bg: #222b30;
+      --text: #f7f7f7;
+      --accent: #6ec1e4;
+      --box: #23272a;
+      --hover: #2d3946;
+      --shadow: rgba(0,0,0,0.22) 0 6px 24px;
       --btn-bg: #6ec1e4;
       --btn-txt: #181f23;
-      --btn-hover: #95e1ff;
     }
+    * { box-sizing: border-box; }
     body {
-      background: var(--main-bg);
-      color: var(--main-text);
-      font-family: 'Inter', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      transition: background 0.3s, color 0.3s;
-      min-height: 100vh;
+      margin:0; padding:0;
+      font-family:'Inter',sans-serif;
+      background:var(--bg); color:var(--text);
+      transition: .3s;
     }
     .container {
-      max-width: 900px;
-      margin: 40px auto 30px;
-      background: var(--box-bg);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 42px;
+      max-width:900px; margin:40px auto;
+      background:var(--box); border-radius:18px;
+      box-shadow:var(--shadow); padding:42px;
     }
-    .top-row {
-      display: flex;
-      align-items: center;
-      gap: 38px;
-      margin-bottom: 18px;
+    .dark-toggle {
+      position:absolute; top:20px; right:20px;
     }
-    .headline h1 {
-      margin: 0;
-      font-size: 2.6em;
-      letter-spacing: -1px;
+    .dark-toggle button {
+      background:var(--btn-bg); color:var(--btn-txt);
+      border:none; padding:8px 16px; border-radius:20px;
+      cursor:pointer; font-weight:bold;
     }
-    .subtitle {
-      color: var(--main-accent);
-      font-weight: 700;
-      font-size: 1.17em;
-      margin-top: 7px;
+    .top {
+      display:flex; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
     }
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid var(--main-accent);
-      box-shadow: 0 8px 32px rgba(20,98,166,0.09);
-      transition: border-color 0.3s;
+    .top h1 { margin:0; font-size:2.4em; }
+    .subtitle { color:var(--accent); font-weight:700; }
+    .profile { width:100px;height:100px;border-radius:50%;
+      border:3px solid var(--accent); object-fit:cover;
     }
-    .darkmode-toggle {
-      position: absolute;
-      top: 32px;
-      right: 60px;
-      z-index: 99;
-    }
-    .darkmode-toggle button {
-      padding: 9px 25px;
-      border-radius: 20px;
-      border: none;
-      font-weight: bold;
-      background: var(--btn-bg);
-      color: var(--btn-txt);
-      font-size: 1.1em;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .darkmode-toggle button:hover {
-      background: var(--btn-hover);
-    }
-    .about-toggle {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      font-weight: 600;
-      margin-bottom: 13px;
-      color: var(--main-accent);
-      font-size: 1.15em;
-      user-select: none;
-    }
-    .about-toggle .arrow {
-      margin-left: 8px;
-      transition: transform 0.3s;
-    }
-    .about-box {
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(.7,0,.3,1);
-      margin-bottom: 13px;
-    }
-    .about-box.open {
-      max-height: 400px;
-      opacity: 1;
-      margin-bottom: 21px;
-      animation: fadeIn .7s;
-    }
-    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    .about { margin:24px 0; }
+    .about h2 { cursor:pointer; color:var(--accent); }
+    .about p { max-height:0; opacity:0; overflow:hidden;
+      transition:.4s; }
+    .about.open p { max-height:400px; opacity:1; }
+
+    .section { margin:36px 0; }
+    .section h2 { margin-bottom:16px; }
 
     /* Timeline */
-    .timeline-section { margin: 46px 0 36px; }
-    .timeline {
-      position: relative;
-      margin-left: 17px;
-      padding-left: 34px;
-      border-left: 3px solid var(--timeline-line);
+    .timeline { border-left:3px solid var(--hover); padding-left:24px; }
+    .event { position:relative; margin-bottom:24px; cursor:pointer; }
+    .event:hover .detail,
+    .event.active .detail { max-height:80px; opacity:1; margin-top:8px; padding:8px; }
+    .event .dot {
+      position:absolute; left:-36px; top:2px;
+      width:16px;height:16px;border-radius:50%;
+      background:var(--accent); border:3px solid var(--box);
     }
-    .timeline-event {
-      position: relative;
-      margin-bottom: 35px;
-      display: flex;
-      flex-direction: column;
-      transition: background 0.18s;
-    }
-    .timeline-point {
-      position: absolute;
-      left: -45px;
-      top: 10px;
-      width: 20px; height: 20px;
-      background: var(--main-accent);
-      border: 4px solid var(--box-bg);
-      border-radius: 50%;
-      transition: box-shadow 0.2s;
-    }
-    .timeline-event:hover .timeline-point,
-    .timeline-event.focus .timeline-point {
-      box-shadow: 0 0 0 8px var(--main-accent, #1462a6, .14);
-    }
-    .timeline-content {
-      display: flex;
-      align-items: baseline;
-      gap: 11px;
-      padding: 7px 18px 7px 12px;
-      border-radius: 12px;
-      font-weight: 600;
-      transition: background 0.14s;
-    }
-    .timeline-event:hover .timeline-content,
-    .timeline-event.focus .timeline-content {
-      background: var(--hover-bg);
-    }
-    .timeline-date { color: #888; font-size: .97em; margin-right:8px; }
-    .timeline-role { color: var(--main-accent); font-size:1.14em; }
-    .timeline-company { color: #aaa; margin-left:8px; }
-    .timeline-detail {
-      background: var(--box-bg);
-      box-shadow: 0 3px 16px rgba(20,98,166,0.09);
-      border: 1.5px solid var(--hover-bg);
-      border-radius: 11px;
-      padding: 0 18px;
-      margin-top: 0;
-      opacity: 0;
-      max-height: 0;
-      transition: all .32s;
-      font-weight:500;
-      pointer-events: none;
-    }
-    .timeline-event:hover .timeline-detail,
-    .timeline-event.focus .timeline-detail,
-    .timeline-event.active .timeline-detail {
-      opacity:1;
-      max-height:60px;
-      margin-top:8px;
-      padding:11px 18px;
-      pointer-events:auto;
+    .event .meta { display:flex; gap:8px; flex-wrap:wrap; }
+    .event .date { color:#888; width:60px; }
+    .detail {
+      background:var(--box); max-height:0; opacity:0;
+      overflow:hidden; transition:.3s; border-radius:8px;
+      box-shadow:var(--shadow);
     }
 
     /* Skills */
-    .skills-section { margin-bottom:40px; }
-    .skills-list {
-      display:flex; flex-wrap:wrap; gap:13px;
-      list-style:none; padding:0; margin:0;
-    }
+    .skills-list { display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0;}
     .skills-list li {
-      background:var(--hover-bg);
-      color:var(--main-accent);
-      padding:8px 19px;
-      border-radius:15px;
-      font-weight:500;
-      transition:.19s;
-      cursor:pointer;
+      background:var(--hover); color:var(--accent);
+      padding:6px 12px; border-radius:12px; font-size:.95em;
+      transition:.2s;
     }
-    .skills-list li:hover, .skills-list li:focus {
-      background:var(--main-accent);
-      color:#fff;
-      transform:translateY(-3px) scale(1.08);
-    }
+    .skills-list li:hover { background:var(--accent); color:#fff; }
 
     /* Projects */
-    .projects-section { margin-bottom:42px; }
-    .projects-list {
-      display:flex; flex-wrap:wrap; gap:20px;
-      list-style:none; padding:0; margin:0;
+    .projects { display:flex; flex-wrap:wrap; gap:16px; list-style:none; padding:0;}
+    .projects a {
+      flex:1 1 220px; background:var(--hover);
+      padding:16px; border-radius:12px; text-decoration:none;
+      color:var(--text); box-shadow:var(--shadow);
+      transition:.2s;
     }
-    .project-card {
-      flex:1 0 230px;
-      background:var(--hover-bg);
-      padding:18px 22px;
-      border-radius:14px;
-      text-decoration:none;
-      color:var(--main-text);
-      box-shadow:0 1px 4px rgba(20,98,166,0.07);
-      transition:.22s;
-    }
-    .project-card:hover, .project-card:focus {
-      background:var(--main-accent);
-      color:#fff;
-      transform:translateY(-5px) scale(1.045);
-    }
+    .projects a:hover { background:var(--accent); color:#fff; }
 
-    /* Contact (immer sichtbar) */
-    .contact-section {
-      display: flex !important;
-      flex-wrap: wrap;
-      gap: 17px;
-      margin-top: 40px;
+    /* Contacts */
+    .contact { display:flex; flex-wrap:wrap; gap:12px; margin-top:32px; }
+    .contact a {
+      background:var(--btn-bg); color:var(--btn-txt);
+      padding:8px 16px; border-radius:20px;
+      text-decoration:none; font-weight:600;
+      transition:.2s;
     }
-    .contact-btn {
-      background:var(--btn-bg);
-      color:var(--btn-txt);
-      padding:10px 26px;
-      border-radius:25px;
-      text-decoration:none;
-      font-weight:600;
-      transition:.16s;
-    }
-    .contact-btn:hover, .contact-btn:focus {
-      background:var(--btn-hover);
-      color:#23272a;
-      transform:translateY(-2px) scale(1.05);
-    }
-    /* Override für Scroll-Anim falls gesetzt */
-    .contact-section {
-      opacity: 1 !important;
-      transform: none !important;
-    }
+    .contact a:hover { background:var(--btn-txt); color:var(--btn-bg); }
 
-    /* Scroll Anim */
-    .scroll-animate {
-      opacity:0; transform:translateY(40px);
-      transition:all .85s cubic-bezier(.4,0,.2,1);
-    }
-    .scroll-animate.visible { opacity:1; transform:none; }
-
-    /* MOBILE FIXES */
-    @media (max-width:740px) {
-      .top-row { flex-direction:column; align-items:flex-start; gap:22px; }
-      .profile-pic { width:90px; height:90px; }
-      .container { padding:9vw 2vw; }
-      .projects-list { flex-direction:column; gap:17px; }
-      .project-card {
-        width:auto; max-width:95vw;
-        margin:0 auto 14px;
-        padding:18px 16px;
-        box-sizing:border-box;
-      }
-      /* Timeline: stacked */
-      .timeline-content {
-        flex-direction:column;
-        align-items:flex-start;
-        gap:3px;
-        padding:11px 12px 8px 11px;
-        font-size:1em;
-      }
-      .timeline-date, .timeline-role, .timeline-company {
-        display:block; margin:0; font-size:1em;
-      }
-      .timeline-date { font-weight:600; color:var(--main-accent); }
-      .timeline-role { color:var(--main-text); font-weight:700; }
-      .timeline-company { color:#aaa; }
-      /* Darkmode icon */
-      .darkmode-toggle button {
-        padding:7px; font-size:1.65em;
-        width:44px; height:44px;
-        text-indent:-1000px; overflow:hidden;
-        position:absolute; top:18px; right:18px;
-      }
-      .darkmode-toggle button:after {
-        content:attr(data-icon);
-        text-indent:0; display:block;
-        text-align:center; width:100%; height:100%;
-      }
-    }
-    @media (max-width:500px) {
-      .timeline-detail { max-width:97vw; }
-      .about-toggle { font-size:1em; }
+    /* Mobile */
+    @media(max-width:600px){
+      .projects a { flex:1 1 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="darkmode-toggle">
-    <button id="darkBtn" data-icon="🌙" style="display:none;"></button>
-    <button id="lightBtn" data-icon="☀️" style="display:none;"></button>
+  <div class="dark-toggle">
+    <button id="toDark">Dark Mode</button>
+    <button id="toLight" style="display:none;">Light Mode</button>
   </div>
 
   <div class="container">
-    <div class="top-row">
-      <div class="headline">
+    <div class="top">
+      <div>
         <h1>Nicola Pollara</h1>
         <div class="subtitle">IT Project Manager | System Release Manager | Tech Enthusiast</div>
       </div>
-      <img src="Profilbild.PNG" alt="Profile picture of Nicola" class="profile-pic">
+      <img src="Profilbild.PNG" alt="" class="profile">
     </div>
 
-    <div>
-      <div class="about-toggle" id="aboutToggle" tabindex="0">
-        About me <span class="arrow">▼</span>
-      </div>
-      <div class="about-box" id="aboutBox">
-        <p>I'm Nicola Pollara, an IT Project Manager and Release Manager based in Switzerland. I have a strong track record in leading digital transformation, implementing enterprise IT systems, and driving cross-functional teams. With deep hands-on experience in SAP S/4HANA, IT infrastructure, and process optimization, I bridge the gap between technology and business. I thrive on turning complex challenges into efficient solutions – always with a focus on collaboration and user impact.</p>
-      </div>
+    <div class="about">
+      <h2 id="aboutToggle">About me ▼</h2>
+      <p>I'm Nicola Pollara, an IT Project Manager and Release Manager based in Switzerland. I have a strong track record in leading digital transformation, implementing enterprise IT systems, and driving cross-functional teams. With deep hands-on experience in SAP S/4HANA, IT infrastructure, and process optimization, I bridge the gap between technology and business. I thrive on turning complex challenges into efficient solutions – always with a focus on collaboration and user impact.</p>
     </div>
 
-    <div class="timeline-section scroll-animate">
+    <div class="section">
       <h2>Professional Timeline</h2>
       <div class="timeline">
-        <!-- timeline events... -->
+        <div class="event" tabindex="0">
+          <span class="dot"></span>
+          <div class="meta"><span class="date">2025–now</span><strong>Quality Systems Engineer</strong><span>@ Roche</span></div>
+          <div class="detail">Focus: Quality IT systems and process optimization in pharma production.</div>
+        </div>
+        <div class="event" tabindex="0">
+          <span class="dot"></span>
+          <div class="meta"><span class="date">2024–now</span><strong>System Release Manager</strong><span>@ Roche</span></div>
+          <div class="detail">Responsible for planning and executing system releases and IT changes.</div>
+        </div>
+        <!-- weitere Events... -->
       </div>
     </div>
 
-    <div class="skills-section scroll-animate">
+    <div class="section">
       <h2>Skills & Tools</h2>
       <ul class="skills-list">
-        <!-- skills list... -->
+        <li><a href="https://en.wikipedia.org/wiki/Project_management" target="_blank">Project Management</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/SAP_S/4HANA" target="_blank">SAP S/4HANA</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Release_management" target="_blank">Release Management</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Scrum_(software_development)" target="_blank">Agile / Scrum</a></li>
       </ul>
     </div>
 
-    <div class="projects-section scroll-animate">
+    <div class="section">
       <h2>Selected Projects</h2>
-      <ul class="projects-list">
-        <!-- project cards... -->
+      <ul class="projects">
+        <a href="https://www.roche.com" target="_blank"><strong>ASPIRE @ Roche</strong><br>Hardware & IT-Lead for global SAP S/4HANA rollout</a>
+        <a href="https://arcane.li" target="_blank"><strong>Arcane GmbH</strong><br>IT setup & digitalization in sports business</a>
+        <a href="https://github.com/NicolaPoll" target="_blank"><strong>Portfolio Website</strong><br>GitHub Profile</a>
       </ul>
     </div>
 
-    <!-- Kontakt-Sektion ohne scroll-animate -->
-    <div class="contact-section">
-      <a href="mailto:nicola.matthias.pollara@gmail.com" class="contact-btn">E-Mail</a>
-      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank" class="contact-btn">LinkedIn</a>
-      <a href="https://github.com/NicolaPoll" target="_blank" class="contact-btn">GitHub</a>
+    <div class="contact">
+      <a href="mailto:nicola.matthias.pollara@gmail.com">E-Mail</a>
+      <a href="https://www.linkedin.com/in/nicola-matthias-pollara-a4b243177/" target="_blank">LinkedIn</a>
+      <a href="https://github.com/NicolaPoll" target="_blank">GitHub</a>
     </div>
   </div>
 
   <script>
-    const darkBtn = document.getElementById('darkBtn');
-    const lightBtn = document.getElementById('lightBtn');
-    function updateModeBtn() {
-      if (window.innerWidth <= 740) {
-        darkBtn.innerText = '';
-        lightBtn.innerText = '';
-      } else {
-        darkBtn.innerText = 'Dark Mode';
-        lightBtn.innerText = 'Light Mode';
-      }
-      if (document.body.classList.contains('dark')) {
-        darkBtn.style.display = 'none';
-        lightBtn.style.display = '';
-      } else {
-        darkBtn.style.display = '';
-        lightBtn.style.display = 'none';
-      }
-    }
-    darkBtn.onclick = () => { document.body.classList.add('dark'); updateModeBtn(); }
-    lightBtn.onclick = () => { document.body.classList.remove('dark'); updateModeBtn(); }
-    window.addEventListener('resize', updateModeBtn);
-    document.addEventListener('DOMContentLoaded', () => {
-      updateModeBtn();
-      // About-me toggle
-      const aboutToggle = document.getElementById('aboutToggle');
-      const aboutBox = document.getElementById('aboutBox');
-      const arrow = aboutToggle.querySelector('.arrow');
-      aboutToggle.onclick = () => {
-        aboutBox.classList.toggle('open');
-        arrow.style.transform = aboutBox.classList.contains('open') ? 'rotate(180deg)' : 'none';
-      };
-      aboutToggle.onkeydown = e => { if (e.key==='Enter'||e.key===' ') aboutToggle.click(); };
-      aboutToggle.addEventListener('mouseenter', () => aboutBox.classList.add('open'));
-      aboutToggle.addEventListener('mouseleave', () => aboutBox.classList.remove('open'));
-      aboutBox.addEventListener('mouseenter', () => aboutBox.classList.add('open'));
-      aboutBox.addEventListener('mouseleave', () => aboutBox.classList.remove('open'));
-      // Scroll animations
-      function scrollAnim() {
-        document.querySelectorAll('.scroll-animate').forEach(el => {
-          if (el.getBoundingClientRect().top < window.innerHeight - 80) el.classList.add('visible');
-        });
-      }
-      window.addEventListener('scroll', scrollAnim);
-      scrollAnim();
-      // Timeline tap toggle
-      document.querySelectorAll('.timeline-event').forEach(item => {
-        item.onfocus = item.onmouseover = () => item.classList.add('focus');
-        item.onblur = item.onmouseout = () => item.classList.remove('focus');
-        item.onclick = () => {
-          document.querySelectorAll('.timeline-event').forEach(ev => ev.classList.remove('active'));
-          item.classList.toggle('active');
-        };
-      });
+    // Dark/Light toggle
+    const toDark = document.getElementById('toDark');
+    const toLight = document.getElementById('toLight');
+    toDark.onclick = () => { document.body.classList.add('dark'); toDark.style.display='none'; toLight.style.display='inline'; };
+    toLight.onclick = () => { document.body.classList.remove('dark'); toLight.style.display='none'; toDark.style.display='inline'; };
+
+    // About toggle
+    const aboutToggle = document.getElementById('aboutToggle');
+    const aboutBox = aboutToggle.nextElementSibling;
+    aboutToggle.onclick = () => aboutBox.classList.toggle('open');
+
+    // Timeline expand
+    document.querySelectorAll('.event').forEach(ev => {
+      ev.onclick = () => ev.classList.toggle('active');
+      ev.onfocus = () => ev.classList.add('active');
+      ev.onblur = () => ev.classList.remove('active');
     });
   </script>
 </body>
