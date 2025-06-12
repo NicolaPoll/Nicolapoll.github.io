@@ -21,7 +21,7 @@
     }
     body.dark {
       --main-bg: #222b30;
-      --main-text: #f7f7f7;
+      --main-text: #f7f9f7;
       --main-accent: #6ec1e4;
       --box-bg: #23272a;
       --timeline-line: #3c4858;
@@ -54,16 +54,6 @@
       gap: 38px;
       margin-bottom: 18px;
     }
-    .profile-pic {
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 3px solid var(--main-accent);
-      box-shadow: 0 8px 32px rgba(20,98,166,0.09);
-      background: #fff;
-      transition: border-color 0.3s;
-    }
     .headline h1 {
       margin: 0;
       font-size: 2.6em;
@@ -74,6 +64,15 @@
       font-weight: 700;
       font-size: 1.17em;
       margin-top: 7px;
+    }
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid var(--main-accent);
+      box-shadow: 0 8px 32px rgba(20,98,166,0.09);
+      transition: border-color 0.3s;
     }
     .darkmode-toggle {
       position: absolute;
@@ -123,6 +122,8 @@
       animation: fadeIn .7s;
     }
     @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+
+    /* Timeline */
     .timeline-section { margin: 46px 0 36px; }
     .timeline {
       position: relative;
@@ -189,6 +190,8 @@
       padding:11px 18px;
       pointer-events:auto;
     }
+
+    /* Skills */
     .skills-section { margin-bottom:40px; }
     .skills-list {
       display:flex; flex-wrap:wrap; gap:13px;
@@ -208,6 +211,8 @@
       color:#fff;
       transform:translateY(-3px) scale(1.08);
     }
+
+    /* Projects */
     .projects-section { margin-bottom:42px; }
     .projects-list {
       display:flex; flex-wrap:wrap; gap:20px;
@@ -228,6 +233,8 @@
       color:#fff;
       transform:translateY(-5px) scale(1.045);
     }
+
+    /* Contact */
     .contact-section {
       display:flex; flex-wrap:wrap; gap:17px;
       margin-top:40px;
@@ -246,6 +253,8 @@
       color:#23272a;
       transform:translateY(-2px) scale(1.05);
     }
+
+    /* Scroll Anim */
     .scroll-animate {
       opacity:0; transform:translateY(40px);
       transition:all .85s cubic-bezier(.4,0,.2,1);
@@ -257,10 +266,26 @@
       .top-row { flex-direction:column; align-items:flex-start; gap:22px; }
       .profile-pic { width:90px; height:90px; }
       .container { padding:9vw 2vw; }
+      /* Projects: auto width, no overflow */
       .projects-list { flex-direction:column; gap:17px; }
-      .project-card { width:100%; box-sizing:border-box; margin:auto; }
-      .contact-section { flex-direction:column; gap:10px; }
-      .headline h1 { font-size:2em; }
+      .project-card {
+        width:auto; max-width:95vw;
+        margin:0 auto 14px;
+        padding:18px 16px;
+        box-sizing:border-box;
+      }
+      /* Contact: ensure visible */
+      .contact-section {
+        display:flex !important;
+        flex-direction:column;
+        gap:12px;
+        margin-top:28px;
+      }
+      .contact-btn {
+        width:auto; max-width:90vw;
+        margin:0 auto;
+      }
+      /* Timeline: stacked */
       .timeline-content {
         flex-direction:column;
         align-items:flex-start;
@@ -274,6 +299,7 @@
       .timeline-date { font-weight:600; color:var(--main-accent); }
       .timeline-role { color:var(--main-text); font-weight:700; }
       .timeline-company { color:#aaa; }
+      /* Darkmode icon */
       .darkmode-toggle button {
         padding:7px; font-size:1.65em;
         width:44px; height:44px;
@@ -281,7 +307,7 @@
         position:absolute; top:18px; right:18px;
       }
       .darkmode-toggle button:after {
-        content: attr(data-icon);
+        content:attr(data-icon);
         text-indent:0; display:block;
         text-align:center; width:100%; height:100%;
       }
@@ -297,6 +323,7 @@
     <button id="darkBtn" data-icon="🌙" style="display:none;"></button>
     <button id="lightBtn" data-icon="☀️" style="display:none;"></button>
   </div>
+
   <div class="container">
     <div class="top-row">
       <div class="headline">
@@ -420,7 +447,8 @@
     const lightBtn = document.getElementById('lightBtn');
     function updateModeBtn() {
       if (window.innerWidth <= 740) {
-        darkBtn.innerText = ''; lightBtn.innerText = '';
+        darkBtn.innerText = '';
+        lightBtn.innerText = '';
       } else {
         darkBtn.innerText = 'Dark Mode';
         lightBtn.innerText = 'Light Mode';
@@ -438,7 +466,7 @@
     window.addEventListener('resize', updateModeBtn);
     document.addEventListener('DOMContentLoaded', () => {
       updateModeBtn();
-      // About me toggle
+      // About-me toggle
       const aboutToggle = document.getElementById('aboutToggle');
       const aboutBox = document.getElementById('aboutBox');
       const arrow = aboutToggle.querySelector('.arrow');
@@ -446,19 +474,15 @@
         aboutBox.classList.toggle('open');
         arrow.style.transform = aboutBox.classList.contains('open') ? 'rotate(180deg)' : 'none';
       };
-      aboutToggle.onkeydown = e => {
-        if (e.key === 'Enter' || e.key === ' ') aboutToggle.click();
-      };
+      aboutToggle.onkeydown = e => { if (e.key==='Enter'||e.key===' ') aboutToggle.click(); };
       aboutToggle.addEventListener('mouseenter', () => aboutBox.classList.add('open'));
       aboutToggle.addEventListener('mouseleave', () => aboutBox.classList.remove('open'));
       aboutBox.addEventListener('mouseenter', () => aboutBox.classList.add('open'));
       aboutBox.addEventListener('mouseleave', () => aboutBox.classList.remove('open'));
-      // Scroll animation
+      // Scroll animations
       function scrollAnim() {
         document.querySelectorAll('.scroll-animate').forEach(el => {
-          if (el.getBoundingClientRect().top < window.innerHeight - 80) {
-            el.classList.add('visible');
-          }
+          if (el.getBoundingClientRect().top < window.innerHeight - 80) el.classList.add('visible');
         });
       }
       window.addEventListener('scroll', scrollAnim);
