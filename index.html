@@ -357,7 +357,65 @@
       .container { margin: 3vw; }
       .about-toggle { font-size: 1em; }
     }
-  </style>
+    @media (max-width: 740px) {
+    .top-row { flex-direction: column; align-items: flex-start; gap: 22px; }
+    .profile-pic { width: 90px; height: 90px; }
+    .container { padding: 9vw 2vw; }
+    .projects-list { flex-direction: column; gap: 17px; }
+    .project-card { min-width: 0; width: 100%; box-sizing: border-box; margin: 0 auto; }
+    .contact-section { gap: 10px; flex-direction: column; }
+    .headline h1 { font-size: 2.0em; }
+    /* Timeline Mobil: alles untereinander */
+    .timeline-content {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+      padding: 11px 12px 8px 11px;
+      font-size: 1em;
+    }
+    .timeline-date, .timeline-role, .timeline-company {
+      margin: 0;
+      font-size: 1em;
+      display: block;
+    }
+    .timeline-date { font-weight: 600; color: var(--main-accent); }
+    .timeline-role { color: var(--main-text); font-weight: 700; font-size: 1.09em; }
+    .timeline-company { color: #aaa; font-size: 1em; }
+    /* Darkmode Toggle Button als Icon */
+    .darkmode-toggle button {
+      padding: 7px 10px;
+      font-size: 1.65em;
+      border-radius: 40px;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      text-indent: -1000px;
+      overflow: hidden;
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      z-index: 999;
+    }
+    .darkmode-toggle button:after {
+      text-indent: 0;
+      display: block;
+      font-size: 1.15em;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0; top: 0;
+    }
+    #darkBtn:after { content: "🌙"; }
+    #lightBtn:after { content: "☀️"; }
+  }
+  @media (max-width: 500px) {
+    .timeline-detail { min-width: 130px; max-width: 97vw; left: 0; }
+    .container { margin: 3vw; }
+    .about-toggle { font-size: 1em; }
+  }
+</style>
 </head>
 <body>
   <div class="darkmode-toggle">
@@ -501,6 +559,13 @@
     const darkBtn = document.getElementById('darkBtn');
     const lightBtn = document.getElementById('lightBtn');
     function updateModeBtn() {
+      if(window.innerWidth <= 740){
+        darkBtn.innerText = '';
+        lightBtn.innerText = '';
+      } else {
+        darkBtn.innerText = 'Dark Mode';
+        lightBtn.innerText = 'Light Mode';
+      }
       if(document.body.classList.contains('dark')) {
         darkBtn.style.display = 'none';
         lightBtn.style.display = '';
@@ -511,8 +576,9 @@
     }
     darkBtn.onclick = () => { document.body.classList.add('dark'); updateModeBtn(); }
     lightBtn.onclick = () => { document.body.classList.remove('dark'); updateModeBtn(); }
-    document.addEventListener('DOMContentLoaded', () => {
-      updateModeBtn();
+    document.addEventListener('DOMContentLoaded', () => { updateModeBtn(); });
+    window.addEventListener('resize', updateModeBtn);
+
     });
 
     // About me toggle: open on click and hover, close on mouseleave (desktop)
